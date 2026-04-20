@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>Rajat Singh · Stardew portfolio</title>
+  <!-- Pixel & clean fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+	
+
+/* Hero two-column layout for photo */
+.hero-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.hero-content {
+  flex: 2 1 300px;
+}
+
+.hero-photo {
+  flex: 1 1 200px;
+  display: flex;
+  justify-content: center;
+}
+
+.photo-frame {
+  width: 220px;
+  height: 220px;
+  border: 5px solid #7c9a6e;
+  border-radius: 30px 8px 30px 8px;
+  box-shadow: 10px 10px 0 #1e2e18, 0 0 0 3px #4a5e3a inset;
+  background: #3a5230;
+  overflow: hidden;
+  image-rendering: pixelated;
+  transition: transform 0.15s;
+}
+
+.photo-frame:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 12px 12px 0 #1e2e18, 0 0 0 3px #b89a5b inset;
+  border-color: #b89a5b;
+}
+
+.photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Mobile: stack */
+@media (max-width: 650px) {
+  .hero-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .hero-photo {
+    align-self: center;
+  }
+}
+
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #1e2a1e;  /* deep forest base */
+      color: #f1e9d8;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ----- STARDEW SOIL & WOOD TEXTURE BACKGROUND ----- */
+    .stardew-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -3;
+      background: radial-gradient(circle at 30% 40%, #2c3e2c, #141e14 95%);
+    }
+
+    /* wood grain overlay */
+    .wood-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -2;
+      background-image: repeating-linear-gradient(45deg, rgba(60, 50, 30, 0.08) 0px, rgba(60, 50, 30, 0.08) 2px, transparent 2px, transparent 8px);
+      pointer-events: none;
+    }
+
+    /* pixel grid (like tilled soil) */
+    .soil-grid {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1;
+      background-image: 
+        linear-gradient(rgba(120, 90, 50, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(120, 90, 50, 0.05) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+    }
+
+    /* floating low-poly shapes (muted, earthy) */
+    .poly-shapes {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .shape {
+      position: absolute;
+      background: rgba(100, 130, 80, 0.1);
+      backdrop-filter: blur(40px);
+      border-radius: 40% 60% 60% 40% / 40% 50% 50% 60%;
+      filter: blur(60px);
+      mix-blend-mode: overlay;
+      animation: floatShape 22s infinite alternate ease-in-out;
+      border: 1px solid rgba(180, 150, 90, 0.1);
+    }
+
+    .shape-1 {
+      width: 70vmax; height: 70vmax;
+      background: #6b8c5c;
+      top: -10vh; right: -15vw;
+      clip-path: polygon(20% 0%, 80% 0%, 100% 50%, 70% 100%, 20% 100%, 0% 50%);
+    }
+    .shape-2 {
+      width: 60vmax; height: 60vmax;
+      background: #a68a56;
+      bottom: -5vh; left: -10vw;
+      clip-path: polygon(50% 0%, 100% 30%, 85% 100%, 15% 100%, 0% 30%);
+      animation-duration: 26s;
+    }
+    .shape-3 {
+      width: 50vmax; height: 50vmax;
+      background: #4a6b3f;
+      top: 30vh; left: 15vw;
+      clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 60% 100%, 30% 100%, 0% 60%);
+    }
+
+    @keyframes floatShape {
+      0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+      100% { transform: translate(3%, 2%) rotate(4deg) scale(1.03); }
+    }
+
+    /* floating pixel leaves / dust */
+    .pixel-dust {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none;
+    }
+    .dust {
+      position: absolute;
+      width: 8px; height: 8px;
+      background: #b89a5b;
+      opacity: 0.15;
+      box-shadow: 0 0 8px #a58b4b;
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+      animation: drift 30s infinite linear;
+    }
+    @keyframes drift {
+      0% { transform: translateY(0) translateX(0); opacity: 0.1; }
+      50% { opacity: 0.25; }
+      100% { transform: translateY(-130vh) translateX(30px); opacity: 0; }
+    }
+
+    /* ----- MAIN LAYOUT ----- */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 2rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    section { margin-bottom: 5rem; }
+
+    /* headings with pixel style */
+    h2 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 1.6rem;
+      font-weight: 400;
+      margin-bottom: 2.2rem;
+      color: #f3e7c4;
+      text-shadow: 4px 4px 0 #2d3a1f;
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 4px solid #b89a5b;
+      padding-bottom: 12px;
+      image-rendering: pixelated;
+    }
+    @media (max-width: 600px) {
+      h2 { font-size: 1.2rem; }
+    }
+
+    .pixel-badge {
+      font-family: 'VT323', monospace;
+      font-size: 1.8rem;
+      background: #3f5132;
+      padding: 6px 12px;
+      border: 3px solid #b89a5b;
+      box-shadow: 4px 4px 0 #1a2618;
+      color: #f3eaca;
+    }
+
+    /* ----- CARDS (handcrafted paper/wood) ----- */
+    .card, .project-card, .cert-card, .about-card {
+      background: rgba(40, 50, 30, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 3px solid #7c9a6e;
+      border-radius: 18px 6px 18px 6px;  /* pixel notch */
+      padding: 1.8rem;
+      box-shadow: 8px 8px 0 #1e2a14, 0 0 0 2px #4a5e3a inset;
+      transition: all 0.15s ease;
+      image-rendering: crisp-edges;
+      color: #f0ebd9;
+    }
+
+    .card:hover, .project-card:hover, .cert-card:hover, .about-card:hover {
+      transform: translate(-3px, -4px);
+      box-shadow: 10px 10px 0 #1e2a14, 0 0 0 2px #b89a5b inset;
+      border-color: #b89a5b;
+    }
+
+    /* ----- HERO SECTION (cozy farm intro) ----- */
+    .hero {
+      padding: 1rem 0 2.5rem;
+    }
+    .hero h1 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: clamp(2.8rem, 12vw, 3.5rem);
+      font-weight: 400;
+      color: #f3e3b0;
+      text-shadow: 6px 6px 0 #2a3b1e, 0 0 20px #8f9e6b;
+      letter-spacing: 3px;
+      margin-bottom: 0.5rem;
+      image-rendering: pixelated;
+    }
+    .tagline {
+      font-family: 'VT323', monospace;
+      font-size: 2rem;
+      color: #d4c9a6;
+      text-shadow: 3px 3px 0 #2d3e1f;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-summary {
+      font-size: 1.2rem;
+      max-width: 650px;
+      background: #2f402bb0;
+      border-left: 6px solid #b89a5b;
+      padding: 0.8rem 1.4rem;
+      border-radius: 0 12px 12px 0;
+      box-shadow: 6px 6px 0 #1f2e18;
+      margin-bottom: 2.2rem;
+      backdrop-filter: blur(4px);
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+    }
+    .btn {
+      background: #4a653b;
+      border: 3px solid #b89a5b;
+      color: #fbf3dd;
+      padding: 0.9rem 2rem;
+      border-radius: 30px 6px 30px 6px;
+      font-family: 'VT323', monospace;
+      font-size: 1.5rem;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 6px 6px 0 #1e2e14;
+      transition: 0.1s;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      image-rendering: pixelated;
+    }
+    .btn i { font-size: 1.3rem; }
+    .btn:hover {
+      background: #6f8f5a;
+      border-color: #e6c87c;
+      box-shadow: 8px 8px 0 #1a2a12;
+      transform: translate(-2px, -3px);
+    }
+
+    /* ----- ABOUT cards ----- */
+    .about-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+    .about-icon {
+      font-size: 2.8rem;
+      color: #d4b87a;
+      filter: drop-shadow(4px 4px 0 #2f4020);
+    }
+    .about-card h3 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 1rem;
+      margin: 0.6rem 0 0.6rem;
+      color: #efe0b2;
+    }
+
+    /* ----- PROJECT cards + arrow button ----- */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2.2rem;
+    }
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .project-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 1.1rem;
+      line-height: 1.4;
+      color: #f7efcf;
+      text-shadow: 2px 2px 0 #2d3e1f;
+      margin-bottom: 0.8rem;
+    }
+    .project-link {
+      background: #5f7a4b;
+      border: 2px solid #b89a5b;
+      border-radius: 50%;
+      width: 36px; height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #f3eaca;
+      box-shadow: 3px 3px 0 #1f2e18;
+      transition: 0.1s;
+      text-decoration: none;
+      font-size: 1.4rem;
+      transform: rotate(-15deg);
+    }
+    .project-link:hover {
+      background: #8aa86e;
+      border-color: #e6c87c;
+      box-shadow: 5px 5px 0 #142010;
+      transform: rotate(0deg) scale(1.05);
+    }
+    .tech-tags {
+      display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1rem 0 1rem;
+    }
+    .tech-tag {
+      background: #3f5633;
+      border: 2px solid #9bb87e;
+      padding: 0.2rem 0.9rem;
+      border-radius: 0 10px 0 10px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #f2ebd0;
+      box-shadow: 2px 2px 0 #1f2e18;
+      text-transform: uppercase;
+      font-family: 'VT323', monospace;
+      font-size: 1rem;
+    }
+    .project-desc { color: #dfd9c0; }
+
+    /* ----- SKILLS badges (pixel farm style) ----- */
+    .skills-section { display: flex; flex-direction: column; gap: 2.5rem; }
+    .skill-group h3 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 1rem;
+      margin-bottom: 1.4rem;
+      color: #e6dbb8;
+      text-shadow: 2px 2px 0 #2d3e1f;
+    }
+    .badge-grid { display: flex; flex-wrap: wrap; gap: 0.9rem 1.2rem; }
+    .skill-badge {
+      background: #3a5230e0;
+      backdrop-filter: blur(8px);
+      border: 3px solid #7c9a6e;
+      padding: 0.7rem 1.5rem;
+      border-radius: 0 16px 0 16px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #f3ebcf;
+      box-shadow: 5px 5px 0 #1e2e18;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'VT323', monospace;
+      font-size: 1.3rem;
+      transition: 0.1s;
+    }
+    .skill-badge i { color: #e6c87c; }
+    .skill-badge:hover {
+      background: #5a7a4a;
+      border-color: #b89a5b;
+      box-shadow: 7px 7px 0 #142010;
+      transform: translate(-2px, -3px);
+    }
+
+    /* ----- CERTIFICATIONS with link arrow ----- */
+    .cert-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.8rem;
+    }
+    .cert-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .cert-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.9rem;
+      color: #f3e3b0;
+    }
+    .cert-link {
+      background: #5f7a4b;
+      border: 2px solid #b89a5b;
+      border-radius: 50%;
+      width: 30px; height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #f3eaca;
+      box-shadow: 3px 3px 0 #1f2e18;
+      text-decoration: none;
+      font-size: 1.2rem;
+      transform: rotate(-10deg);
+    }
+    .cert-link:hover {
+      background: #8aa86e;
+      border-color: #e6c87c;
+      transform: rotate(0deg);
+    }
+    .cert-issuer {
+      display: flex; align-items: center; gap: 8px;
+      color: #cfc49f; font-size: 0.9rem; margin: 0.5rem 0;
+    }
+    .cert-year {
+      background: #3f5633; padding: 0.1rem 0.8rem; border-radius: 0 8px 0 8px;
+      border: 1px solid #b89a5b; font-family: 'VT323', monospace; font-size: 1.1rem;
+    }
+    .cert-desc { color: #d4cfb4; }
+
+    /* ----- CONTACT (pixel icons) ----- */
+    .contact-flex {
+      display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap; margin-top: 2rem;
+    }
+    .contact-icon {
+      background: #3e5833;
+      border: 4px solid #b89a5b;
+      width: 80px; height: 80px;
+      border-radius: 20px 6px 20px 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.8rem; color: #f3e7c4;
+      box-shadow: 8px 8px 0 #1e2e18;
+      transition: 0.1s;
+      text-decoration: none;
+      image-rendering: pixelated;
+    }
+    .contact-icon:hover {
+      background: #6f8f5a;
+      border-color: #e6c87c;
+      box-shadow: 10px 10px 0 #142010;
+      transform: translate(-5px, -6px);
+    }
+
+    .footer-note {
+      text-align: center; margin-top: 4rem;
+      font-family: 'Press Start 2P', cursive; font-size: 0.7rem;
+      color: #b9af8a; text-shadow: 2px 2px 0 #1a2618;
+    }
+
+    /* responsive */
+    @media (max-width: 600px) {
+      .container { padding: 1rem 1rem; }
+      .btn { font-size: 1.2rem; padding: 0.6rem 1.2rem; }
+    }
+
+    /* extra pixel touch */
+    .pixel-corners {
+      clip-path: polygon(0% 8px, 8px 0%, calc(100% - 8px) 0%, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0% calc(100% - 8px));
+    }
+  </style>
+</head>
+<body>
+  <!-- Stardew background layers -->
+  <div class="stardew-bg"></div>
+  <div class="wood-overlay"></div>
+  <div class="soil-grid"></div>
+  <div class="poly-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+  <div class="pixel-dust">
+    <div class="dust" style="left: 10%; animation-duration: 32s;"></div>
+    <div class="dust" style="left: 45%; width: 6px; height: 6px; background: #9c8a4c; animation-duration: 40s;"></div>
+    <div class="dust" style="left: 75%; animation-duration: 28s;"></div>
+  </div>
+
+  <div class="container">
+    <section class="hero">
+  <div class="hero-wrapper">
+    <div class="hero-content">
+      <h1>Rajat Singh</h1>
+      <div class="tagline">
+        <span class="pixel-badge">✦</span> CS Engineer · ML · Full Stack
+      </div>
+      <div class="hero-summary">
+        <i class="fas fa-seedling" style="margin-right: 12px; color:#b89a5b;"></i> Chennai, IN · inherited the code farm.
+      </div>
+      <div class="hero-buttons">
+        <a href="#projects" class="btn"><i class="fas fa-trowel"></i> Projects</a>
+        <a href="#contact" class="btn"><i class="fas fa-envelope-open-text"></i> Contact</a>
+      </div>
+    </div>
+    <div class="hero-photo">
+      <div class="photo-frame">
+        <!-- Replace with your actual photo path or URL -->
+        <img src="C:\Users\ramsi\Downloads\Documents\Github\Portfolio\pfp.png" alt="Rajat Singh pixel portrait">
+      </div>
+    </div>
+  </div>
+</section>
+
+    <!-- ABOUT -->
+    <section>
+      <h2><span class="pixel-badge">01</span> About the farmer</h2>
+      <div class="about-grid">
+        <div class="about-card">
+          <i class="fas fa-book about-icon"></i>
+          <h3>Education</h3>
+          <p><strong>SRM IST</strong> · B.Tech CSE<br>CGPA 8.39 · 2023–2027</p>
+          <p style="margin-top:6px;"><strong>Little Flower School</strong> · <br>X- 91.8% · XII- 89.2%</p>
+        </div>
+        <div class="about-card">
+          <i class="fas fa-tree about-icon"></i>
+          <h3>Focus crops</h3>
+          <p>Machine Learning · Transformers · Full‑Stack · Open Source</p>
+          <p style="margin-top:10px;"><i class="fas fa-dice-d6"></i> CNNs · REST · Explainable AI</p>
+        </div>
+        <div class="about-card">
+          <i class="fas fa-language about-icon"></i>
+          <h3>Languages</h3>
+          <p>English (pro) · Hindi (native)<br>Japanese (elementary)</p>
+          <p style="margin-top:10px;"><i class="fas fa-futbol"></i> Football · fitness</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS (with arrow buttons) -->
+    <section id="projects">
+      <h2><span class="pixel-badge">02</span> Harvested projects</h2>
+      <div class="projects-grid">
+        <div class="project-card">
+          <div class="project-header">
+            <div class="project-title">Lung Disease<br>Classification</div>
+            <a href="#" class="project-link" aria-label="view project" title="view repo"><i class="fas fa-arrow-right"></i></a>
+          </div>
+          <div class="tech-tags">
+            <span class="tech-tag">Python</span><span class="tech-tag">Transformers</span><span class="tech-tag">PyTorch</span>
+          </div>
+          <div class="project-desc">Transformer model with attention for lung disease classification. Medical dataset processing.</div>
+        </div>
+        <div class="project-card">
+          <div class="project-header">
+            <div class="project-title">Plant Disease<br>Classification</div>
+            <a href="#" class="project-link" aria-label="view project"><i class="fas fa-arrow-right"></i></a>
+          </div>
+          <div class="tech-tags">
+            <span class="tech-tag">CNN</span><span class="tech-tag">TensorFlow</span><span class="tech-tag">OpenCV</span>
+          </div>
+          <div class="project-desc">CNN model classifying healthy/diseased leaves. Preprocessing & augmentation.</div>
+        </div>
+        <div class="project-card">
+          <div class="project-header">
+            <div class="project-title">Climate Data<br>Viz Tool</div>
+            <a href="#" class="project-link" aria-label="view project"><i class="fas fa-arrow-right"></i></a>
+          </div>
+          <div class="tech-tags">
+            <span class="tech-tag">Java</span><span class="tech-tag">JDBC</span><span class="tech-tag">MySQL</span>
+          </div>
+          <div class="project-desc">Java app to store and visualize climate data. JDBC + environmental insights.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section>
+      <h2><span class="pixel-badge">03</span> Toolbelt</h2>
+      <div class="skills-section">
+        <div class="skill-group"><h3><i class="fas fa-code"></i> Languages</h3>
+          <div class="badge-grid">
+            <span class="skill-badge"><i class="fab fa-python"></i> Python</span>
+            <span class="skill-badge"><i class="fas fa-code"></i> C++</span>
+            <span class="skill-badge"><i class="fab fa-java"></i> Java</span>
+            <span class="skill-badge"><i class="fab fa-js"></i> JavaScript</span>
+            <span class="skill-badge"><i class="fab fa-html5"></i> HTML/CSS</span>
+            <span class="skill-badge"><i class="fas fa-database"></i> SQL</span>
+          </div>
+        </div>
+        <div class="skill-group"><h3><i class="fas fa-cubes"></i> Frameworks</h3>
+          <div class="badge-grid">
+            <span class="skill-badge"><i class="fab fa-react"></i> React</span>
+            <span class="skill-badge"><i class="fab fa-node"></i> Node.js</span>
+            <span class="skill-badge"><i class="fas fa-server"></i> Express</span>
+            <span class="skill-badge"><i class="fas fa-fire"></i> PyTorch</span>
+            <span class="skill-badge"><i class="fas fa-table"></i> NumPy</span>
+            <span class="skill-badge"><i class="fas fa-chart-line"></i> Pandas</span>
+          </div>
+        </div>
+        <div class="skill-group"><h3><i class="fas fa-tools"></i> Tools</h3>
+          <div class="badge-grid">
+            <span class="skill-badge"><i class="fab fa-git-alt"></i> Git</span>
+            <span class="skill-badge"><i class="fas fa-code"></i> VS Code</span>
+            <span class="skill-badge"><i class="fas fa-database"></i> MongoDB</span>
+            <span class="skill-badge"><i class="fas fa-cloud"></i> REST</span>
+            <span class="skill-badge"><i class="fas fa-robot"></i> ML</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CERTIFICATIONS with links -->
+    <section>
+      <h2><span class="pixel-badge">04</span> Achievements</h2>
+      <div class="cert-list">
+        <div class="cert-card">
+          <div class="cert-header">
+            <div class="cert-title">SAP Generative AI</div>
+            <a href="https://www.credly.com/badges/abc166c7-135d-479e-b3b7-c9c665bf1e74/linked_in_profile" class="cert-link" target="" title="view credential"><i class="fas fa-arrow-up-right-from-square"></i></a>
+          </div>
+          <div class="cert-issuer"><i class="fas fa-building"></i> SAP <span class="cert-year">Mar 2026</span></div>
+          <div class="cert-desc">Generative AI, prompt engineering, SAP AI tools.</div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-header">
+            <div class="cert-title">Programming in Java</div>
+            <a href="https://drive.google.com/file/d/1-gBmN_2Y8g6TRyy6fYiUJzUPq-9aszGH/view?usp=sharing" class="cert-link" target=""><i class="fas fa-arrow-up-right-from-square"></i></a>
+          </div>
+          <div class="cert-issuer"><i class="fas fa-chalkboard"></i> NPTEL <span class="cert-year">2024</span></div>
+          <div class="cert-desc">OOP, collections, exceptions, GUI.</div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-header">
+            <div class="cert-title">Data Structures</div>
+            <a href="https://www.udemy.com/certificate/UC-93b23359-d846-42e3-ac04-48b54accb0c6/" class="cert-link" target=""><i class="fas fa-arrow-up-right-from-square"></i></a>
+          </div>
+          <div class="cert-issuer"><i class="fas fa-laptop"></i> Udemy <span class="cert-year">2024</span></div>
+          <div class="cert-desc">Arrays, stacks, queues, linked lists.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <h2><span class="pixel-badge">05</span> Send a letter</h2>
+      <div class="contact-flex">
+        <a href="mailto:ramsingg688@gmail.com" class="contact-icon"><i class="fas fa-envelope"></i></a>
+        <a href="https://www.linkedin.com/in/rajat-singh-653646321/" target="_blank" class="contact-icon"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://github.com/rajatsingh1705" target="_blank" class="contact-icon"><i class="fab fa-github"></i></a>
+      </div>
+      <div style="text-align:center; margin-top:2rem; font-family:'VT323'; font-size:1.5rem; color:#d4c9a6;">
+        <i class="fas fa-phone-alt"></i> +91-8318483707  ·  Chennai
+      </div>
+    </section>
+
+    <div class="footer-note">
+      <span>✦  crafted with stardew soul · thanks for visiting  ✦</span>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // smooth scroll
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href === "#" || href === "") return;
+          const target = document.querySelector(href);
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+      // (project/cert links can be replaced with real URLs)
+    })();
+  </script>
+</body>
+</html>
